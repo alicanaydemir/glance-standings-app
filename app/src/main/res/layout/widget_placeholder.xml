@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="32dp"
-        android:background="#FFFFCC02"
+        android:background="@color/color_yellow"
         android:gravity="center"
         android:paddingStart="12dp"
         android:paddingEnd="12dp">
@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/standings"
-            android:textColor="@color/black"
+            android:textColor="@color/color_black"
             android:textSize="18sp"
             android:textStyle="bold">
 

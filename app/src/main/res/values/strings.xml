@@ -2,9 +2,11 @@
     <string name="app_name">GlanceTestApp</string>
     <string name="desc_widget">GlanceTestApp desc here…</string>
     <string name="standings_database">StandingsDatabase</string>
-    <string name="delete_team">Takımı Sil</string>
-    <string name="please_pick_team">"Takım Seçiniz</string>
+    <string name="delete_team">Remove</string>
     <string name="standings">Standings</string>
-    <string name="no_standings_data">No data for selected team</string>
-    <string name="error">Hata</string>
+    <string name="no_standings_data">No data for\nchosen team</string>
+    <string name="error">Error</string>
+    <string name="what_club_u_support">What club do you support?</string>
+    <string name="choose_a_team">Choose a team</string>
+    <string name="loading">Loading…</string>
 </resources>

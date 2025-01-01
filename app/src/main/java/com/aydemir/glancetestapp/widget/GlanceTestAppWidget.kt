@@ -34,6 +34,7 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import androidx.glance.material3.ColorProviders
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -47,6 +48,9 @@ import com.aydemir.glancetestapp.main.MainActivity
 import com.aydemir.glancetestapp.model.StandingUisState
 import com.aydemir.glancetestapp.model.StandingsState
 import com.aydemir.glancetestapp.model.Team
+import com.aydemir.glancetestapp.ui.theme.DarkColorScheme
+import com.aydemir.glancetestapp.ui.theme.LightColorScheme
+import com.aydemir.glancetestapp.ui.theme.Primary
 import com.aydemir.glancetestapp.util.Colors
 import com.aydemir.glancetestapp.worker.DeleteDataWorker
 import com.aydemir.glancetestapp.worker.GetDataWorker
@@ -57,7 +61,12 @@ class GlanceTestAppWidget : GlanceAppWidget() {
         val repository = StandingsRepositoryImp.get(context)
 
         provideContent {
-            GlanceTheme {
+            GlanceTheme(
+                colors = ColorProviders(
+                    light = LightColorScheme,
+                    dark = DarkColorScheme,
+                ),
+            ) {
                 WidgetScreen(repository = repository)
             }
         }
@@ -69,8 +78,7 @@ class GlanceTestAppWidget : GlanceAppWidget() {
         val stateStandings =
             repository.getStandingsState().collectAsState(initial = StandingsState.Empty).value
 
-        val stateLoading =
-            repository.loading.collectAsState().value
+        val stateLoading = repository.loading.collectAsState().value
 
         Column(
             modifier = GlanceModifier.fillMaxSize().background(Colors.Bg),
@@ -80,11 +88,12 @@ class GlanceTestAppWidget : GlanceAppWidget() {
                 contentAlignment = Alignment.Center, modifier = GlanceModifier.fillMaxSize()
             ) {
                 if (stateLoading == StandingUisState.Loading) {
-                    CircularProgressIndicator()
+                    CircularProgressIndicator(color = ColorProvider(color = Primary))
                 } else {
                     when (stateStandings) {
                         is StandingsState.Empty -> {
                             Text(
+                                style = TextStyle(textAlign = androidx.glance.text.TextAlign.Center),
                                 text = LocalContext.current.getString(R.string.no_standings_data)
                             )
                         }
@@ -99,7 +108,7 @@ class GlanceTestAppWidget : GlanceAppWidget() {
 
                         is StandingsState.NoSelectedTeam -> {
                             Button(
-                                text = LocalContext.current.getString(R.string.please_pick_team),
+                                text = LocalContext.current.getString(R.string.choose_a_team),
                                 onClick = actionStartActivity<MainActivity>()
                             )
                         }

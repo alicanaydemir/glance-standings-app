@@ -11,7 +11,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -35,17 +37,19 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aydemir.glancetestapp.R
 import com.aydemir.glancetestapp.model.DataSample
 import com.aydemir.glancetestapp.model.StandingUisState
 import com.aydemir.glancetestapp.model.Team
 import com.aydemir.glancetestapp.ui.theme.GlanceTestAppTheme
-import com.aydemir.glancetestapp.util.Colors
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -72,12 +76,24 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
     val stateLoadingDelete = viewModel.loadingDelete.collectAsState().value
 
     Surface(
-        modifier = Modifier.fillMaxSize(), color = Colors.Bg
+        modifier = Modifier.fillMaxSize()
     ) {
-        Box(contentAlignment = Alignment.Center) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+        ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                Text(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    textAlign = TextAlign.Center,
+                    text = LocalContext.current.getString(R.string.what_club_u_support)
+                )
+                Spacer(modifier = Modifier.height(16.dp))
                 Dropdown(selectedId = mSelectedId, {
                     scope.launch {
                         viewModel.saveSelectedTeam(it.id)
@@ -105,7 +121,7 @@ fun Dropdown(selectedId: Int, onSelectedTeam: (Team) -> Unit, stateLoadingSave: 
 
     Box(
         modifier = Modifier
-            .background(MaterialTheme.colorScheme.onSurface)
+            .background(MaterialTheme.colorScheme.surfaceContainer)
             .padding(16.dp)
             .animateContentSize()
             .clickable {
@@ -115,15 +131,17 @@ fun Dropdown(selectedId: Int, onSelectedTeam: (Team) -> Unit, stateLoadingSave: 
     ) {
         if (stateLoadingSave is StandingUisState.Loading) {
             Text(
+                fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
-                text = "Loading..."
+                text = LocalContext.current.getString(R.string.loading)
             )
         } else {
             Row {
                 Text(
+                    fontWeight = FontWeight.Medium,
                     textAlign = TextAlign.Center,
                     text = DataSample.getListStandings().firstOrNull { it.id == selectedId }?.name
-                        ?: "Tuttuğunuz takım?"
+                        ?: LocalContext.current.getString(R.string.choose_a_team)
                 )
                 Icon(icon, "")
             }
@@ -156,7 +174,7 @@ fun LoadingButton(
         if (stateLoadingDelete is StandingUisState.Loading || stateLoadingSave is StandingUisState.Loading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(24.dp),
-                color = Color.Black
+                color = Color.White
             )
         } else {
             Text(
