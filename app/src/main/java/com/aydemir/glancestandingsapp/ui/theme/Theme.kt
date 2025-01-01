@@ -35,7 +35,7 @@ val LightColorScheme = lightColorScheme(
 )
 
 @Composable
-fun GlanceTestAppTheme(
+fun GlanceStandingsAppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,

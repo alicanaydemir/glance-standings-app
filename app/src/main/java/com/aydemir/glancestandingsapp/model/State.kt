@@ -13,7 +13,7 @@ sealed class StandingsState<out T> {
     data class Error(val exception: Throwable) : StandingsState<Nothing>()
 }
 
-sealed interface StandingUisState {
-    data object Success : StandingUisState
-    data object Loading : StandingUisState
+sealed interface StandingsUiState {
+    data object Success : StandingsUiState
+    data object Loading : StandingsUiState
 }

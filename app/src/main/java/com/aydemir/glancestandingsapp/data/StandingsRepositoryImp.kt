@@ -6,7 +6,7 @@ import com.aydemir.glancestandingsapp.local.DataStoreSelectedTeamManager
 import com.aydemir.glancestandingsapp.local.StandingsDao
 import com.aydemir.glancestandingsapp.model.DataSample
 import com.aydemir.glancestandingsapp.model.Resource
-import com.aydemir.glancestandingsapp.model.StandingUisState
+import com.aydemir.glancestandingsapp.model.StandingsUiState
 import com.aydemir.glancestandingsapp.model.StandingsState
 import com.aydemir.glancestandingsapp.model.Team
 import dagger.hilt.EntryPoint
@@ -52,15 +52,15 @@ class StandingsRepositoryImp @Inject internal constructor(
     }
 
     private fun showLoading() {
-        _loading.value = StandingUisState.Loading
+        _loading.value = StandingsUiState.Loading
     }
 
     private fun hideLoading() {
-        _loading.value = StandingUisState.Success
+        _loading.value = StandingsUiState.Success
     }
 
-    private val _loading = MutableStateFlow<StandingUisState>(StandingUisState.Success)
-    val loading: StateFlow<StandingUisState> = _loading.asStateFlow()
+    private val _loading = MutableStateFlow<StandingsUiState>(StandingsUiState.Success)
+    val loading: StateFlow<StandingsUiState> = _loading.asStateFlow()
 
     //-----------------------------------------------------------------------//
 

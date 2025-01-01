@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import com.aydemir.glancestandingsapp.data.StandingsRepositoryImp
 import com.aydemir.glancestandingsapp.local.DataStoreSelectedTeamManager
 import com.aydemir.glancestandingsapp.model.Resource
-import com.aydemir.glancestandingsapp.model.StandingUisState
-import com.aydemir.glancestandingsapp.widget.GlanceTestAppWidget
+import com.aydemir.glancestandingsapp.model.StandingsUiState
+import com.aydemir.glancestandingsapp.widget.GlanceStandingsAppWidget
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -28,11 +28,11 @@ class MainViewModel @Inject constructor(
     private val _hasSelectedTeamId = MutableStateFlow(0)
     val hasSelectedTeamId: StateFlow<Int> = _hasSelectedTeamId
 
-    private val _loadingSave = MutableStateFlow<StandingUisState>(StandingUisState.Success)
-    val loadingSave: StateFlow<StandingUisState> = _loadingSave.asStateFlow()
+    private val _loadingSave = MutableStateFlow<StandingsUiState>(StandingsUiState.Success)
+    val loadingSave: StateFlow<StandingsUiState> = _loadingSave.asStateFlow()
 
-    private val _loadingDelete = MutableStateFlow<StandingUisState>(StandingUisState.Success)
-    val loadingDelete: StateFlow<StandingUisState> = _loadingDelete.asStateFlow()
+    private val _loadingDelete = MutableStateFlow<StandingsUiState>(StandingsUiState.Success)
+    val loadingDelete: StateFlow<StandingsUiState> = _loadingDelete.asStateFlow()
 
     init {
         getSelectedTeamData()
@@ -48,26 +48,26 @@ class MainViewModel @Inject constructor(
 
     fun saveSelectedTeam(selectedTeamId: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            _loadingSave.value = StandingUisState.Loading
+            _loadingSave.value = StandingsUiState.Loading
             standingsRepositoryImp.setSelectedTeam(selectedTeamId).collect {
                 if (it is Resource.Success) {
                     _hasSelectedTeamId.value = selectedTeamId
                     updateWidget(appContext)
                 }
-                _loadingSave.value = StandingUisState.Success
+                _loadingSave.value = StandingsUiState.Success
             }
         }
     }
 
     fun deleteSelectedTeam() {
         viewModelScope.launch(Dispatchers.IO) {
-            _loadingDelete.value = StandingUisState.Loading
+            _loadingDelete.value = StandingsUiState.Loading
             standingsRepositoryImp.deleteSelectedTeam().collect {
                 if (it is Resource.Success) {
                     _hasSelectedTeamId.value = 0
                     updateWidget(appContext)
                 }
-                _loadingDelete.value = StandingUisState.Success
+                _loadingDelete.value = StandingsUiState.Success
             }
         }
     }
@@ -75,7 +75,7 @@ class MainViewModel @Inject constructor(
     private suspend fun updateWidget(context: Context) {
         withContext(Dispatchers.Main) {
             val manager = GlanceAppWidgetManager(context)
-            val widget = GlanceTestAppWidget()
+            val widget = GlanceStandingsAppWidget()
             val glanceIds = manager.getGlanceIds(widget.javaClass)
             glanceIds.forEach { glanceId ->
                 widget.update(context, glanceId)

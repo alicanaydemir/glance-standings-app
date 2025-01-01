@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "GlanceTestApp"
+rootProject.name = "GlanceStandingsApp"
 include(":app")

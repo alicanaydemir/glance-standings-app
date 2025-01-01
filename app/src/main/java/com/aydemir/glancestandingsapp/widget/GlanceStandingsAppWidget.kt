@@ -45,7 +45,7 @@ import androidx.work.WorkRequest
 import com.aydemir.glancestandingsapp.R
 import com.aydemir.glancestandingsapp.data.StandingsRepositoryImp
 import com.aydemir.glancestandingsapp.main.MainActivity
-import com.aydemir.glancestandingsapp.model.StandingUisState
+import com.aydemir.glancestandingsapp.model.StandingsUiState
 import com.aydemir.glancestandingsapp.model.StandingsState
 import com.aydemir.glancestandingsapp.model.Team
 import com.aydemir.glancestandingsapp.ui.theme.DarkColorScheme
@@ -55,7 +55,7 @@ import com.aydemir.glancestandingsapp.util.Colors
 import com.aydemir.glancestandingsapp.worker.DeleteDataWorker
 import com.aydemir.glancestandingsapp.worker.GetDataWorker
 
-class GlanceTestAppWidget : GlanceAppWidget() {
+class GlanceStandingsAppWidget : GlanceAppWidget() {
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repository = StandingsRepositoryImp.get(context)
@@ -87,7 +87,7 @@ class GlanceTestAppWidget : GlanceAppWidget() {
             Box(
                 contentAlignment = Alignment.Center, modifier = GlanceModifier.fillMaxSize()
             ) {
-                if (stateLoading == StandingUisState.Loading) {
+                if (stateLoading == StandingsUiState.Loading) {
                     CircularProgressIndicator(color = ColorProvider(color = Primary))
                 } else {
                     when (stateStandings) {

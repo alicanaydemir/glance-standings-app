@@ -11,13 +11,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.GlanceTestApp"
+        android:theme="@style/Theme.GlanceStandingsApp"
         tools:targetApi="31">
         <activity
-            android:launchMode="singleTask"
             android:name=".main.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.GlanceTestApp">
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.GlanceStandingsApp">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,7 +25,7 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name=".widget.GlanceTestAppWidgetReceiver"
+            android:name=".widget.GlanceStandingsAppWidgetReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

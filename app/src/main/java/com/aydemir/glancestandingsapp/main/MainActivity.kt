@@ -47,9 +47,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.aydemir.glancestandingsapp.R
 import com.aydemir.glancestandingsapp.model.DataSample
-import com.aydemir.glancestandingsapp.model.StandingUisState
+import com.aydemir.glancestandingsapp.model.StandingsUiState
 import com.aydemir.glancestandingsapp.model.Team
-import com.aydemir.glancestandingsapp.ui.theme.GlanceTestAppTheme
+import com.aydemir.glancestandingsapp.ui.theme.GlanceStandingsAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            GlanceTestAppTheme {
+            GlanceStandingsAppTheme {
                 MainScreen()
             }
         }
@@ -98,7 +98,7 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
                     scope.launch {
                         viewModel.saveSelectedTeam(it.id)
                     }
-                }, stateLoadingSave = stateLoadingSave)
+                }, stateLoadingDelete = stateLoadingDelete, stateLoadingSave = stateLoadingSave)
                 AnimatedVisibility(visible = mSelectedId != 0) {
                     LoadingButton(
                         scope = scope,
@@ -114,7 +114,12 @@ fun MainScreen(viewModel: MainViewModel = viewModel()) {
 }
 
 @Composable
-fun Dropdown(selectedId: Int, onSelectedTeam: (Team) -> Unit, stateLoadingSave: StandingUisState) {
+fun Dropdown(
+    selectedId: Int,
+    onSelectedTeam: (Team) -> Unit,
+    stateLoadingDelete: StandingsUiState,
+    stateLoadingSave: StandingsUiState
+) {
     var mExpanded by remember { mutableStateOf(false) }
     val icon = if (mExpanded) Icons.Filled.KeyboardArrowUp
     else Icons.Filled.KeyboardArrowDown
@@ -125,11 +130,11 @@ fun Dropdown(selectedId: Int, onSelectedTeam: (Team) -> Unit, stateLoadingSave: 
             .padding(16.dp)
             .animateContentSize()
             .clickable {
-                if (stateLoadingSave is StandingUisState.Loading) return@clickable
+                if (stateLoadingSave is StandingsUiState.Loading || stateLoadingDelete is StandingsUiState.Loading) return@clickable
                 mExpanded = !mExpanded
             }
     ) {
-        if (stateLoadingSave is StandingUisState.Loading) {
+        if (stateLoadingSave is StandingsUiState.Loading) {
             Text(
                 fontWeight = FontWeight.Medium,
                 textAlign = TextAlign.Center,
@@ -162,16 +167,16 @@ fun Dropdown(selectedId: Int, onSelectedTeam: (Team) -> Unit, stateLoadingSave: 
 fun LoadingButton(
     scope: CoroutineScope,
     onClick: () -> Unit,
-    stateLoadingDelete: StandingUisState,
-    stateLoadingSave: StandingUisState
+    stateLoadingDelete: StandingsUiState,
+    stateLoadingSave: StandingsUiState
 ) {
     Button(modifier = Modifier.padding(8.dp), onClick = {
-        if (stateLoadingDelete is StandingUisState.Loading) return@Button
+        if (stateLoadingDelete is StandingsUiState.Loading || stateLoadingSave is StandingsUiState.Loading) return@Button
         scope.launch {
             onClick.invoke()
         }
     }) {
-        if (stateLoadingDelete is StandingUisState.Loading || stateLoadingSave is StandingUisState.Loading) {
+        if (stateLoadingDelete is StandingsUiState.Loading || stateLoadingSave is StandingsUiState.Loading) {
             CircularProgressIndicator(
                 modifier = Modifier.size(24.dp),
                 color = Color.White
@@ -189,7 +194,7 @@ fun LoadingButton(
 @Preview
 @Composable
 fun GreetingPreview() {
-    GlanceTestAppTheme {
+    GlanceStandingsAppTheme {
         MainScreen()
     }
 }
