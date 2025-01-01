@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">GlanceTestApp</string>
-    <string name="desc_widget">GlanceTestApp desc here…</string>
+    <string name="app_name">StandingsApp</string>
+    <string name="desc_widget">GlanceStandingsApp desc here…</string>
     <string name="standings_database">StandingsDatabase</string>
     <string name="delete_team">Remove</string>
     <string name="standings">Standings</string>

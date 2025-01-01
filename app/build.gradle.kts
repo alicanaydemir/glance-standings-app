@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.aydemir.glancetestapp"
+    namespace = "com.aydemir.glancestandingsapp"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.aydemir.glancetestapp"
+        applicationId = "com.aydemir.glancestandingsapp"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
