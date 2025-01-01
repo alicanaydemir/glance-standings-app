@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">GlanceTestApp</string>
+    <string name="desc_widget">GlanceTestApp desc here…</string>
+    <string name="standings_database">StandingsDatabase</string>
+    <string name="delete_team">Takımı Sil</string>
+    <string name="please_pick_team">"Takım Seçiniz</string>
+    <string name="standings">Standings</string>
+    <string name="no_standings_data">No data for selected team</string>
+    <string name="error">Hata</string>
+</resources>
