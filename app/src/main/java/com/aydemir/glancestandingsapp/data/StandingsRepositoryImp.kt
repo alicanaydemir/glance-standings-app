@@ -6,9 +6,10 @@ import com.aydemir.glancestandingsapp.local.DataStoreSelectedTeamManager
 import com.aydemir.glancestandingsapp.local.StandingsDao
 import com.aydemir.glancestandingsapp.model.DataSample
 import com.aydemir.glancestandingsapp.model.Resource
-import com.aydemir.glancestandingsapp.model.StandingsUiState
 import com.aydemir.glancestandingsapp.model.StandingsState
+import com.aydemir.glancestandingsapp.model.StandingsUiState
 import com.aydemir.glancestandingsapp.model.Team
+import com.aydemir.glancestandingsapp.util.updateWidget
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -92,6 +93,7 @@ class StandingsRepositoryImp @Inject internal constructor(
 
         showLoading()
         deleteStandingsNoResult()
+        appContext.updateWidget()
 
         //api request will be here
         delay(2000)
@@ -158,6 +160,7 @@ class StandingsRepositoryImp @Inject internal constructor(
             standingsDao.deleteTeams()
         }
     }
+
     //-----------------------------------------------------------------------//
 }
 

@@ -1,14 +1,13 @@
 package com.aydemir.glancestandingsapp.main
 
 import android.content.Context
-import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.aydemir.glancestandingsapp.data.StandingsRepositoryImp
 import com.aydemir.glancestandingsapp.local.DataStoreSelectedTeamManager
 import com.aydemir.glancestandingsapp.model.Resource
 import com.aydemir.glancestandingsapp.model.StandingsUiState
-import com.aydemir.glancestandingsapp.widget.GlanceStandingsAppWidget
+import com.aydemir.glancestandingsapp.util.updateWidget
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -52,7 +50,7 @@ class MainViewModel @Inject constructor(
             standingsRepositoryImp.setSelectedTeam(selectedTeamId).collect {
                 if (it is Resource.Success) {
                     _hasSelectedTeamId.value = selectedTeamId
-                    updateWidget(appContext)
+                    appContext.updateWidget()
                 }
                 _loadingSave.value = StandingsUiState.Success
             }
@@ -65,20 +63,9 @@ class MainViewModel @Inject constructor(
             standingsRepositoryImp.deleteSelectedTeam().collect {
                 if (it is Resource.Success) {
                     _hasSelectedTeamId.value = 0
-                    updateWidget(appContext)
+                    appContext.updateWidget()
                 }
                 _loadingDelete.value = StandingsUiState.Success
-            }
-        }
-    }
-
-    private suspend fun updateWidget(context: Context) {
-        withContext(Dispatchers.Main) {
-            val manager = GlanceAppWidgetManager(context)
-            val widget = GlanceStandingsAppWidget()
-            val glanceIds = manager.getGlanceIds(widget.javaClass)
-            glanceIds.forEach { glanceId ->
-                widget.update(context, glanceId)
             }
         }
     }
