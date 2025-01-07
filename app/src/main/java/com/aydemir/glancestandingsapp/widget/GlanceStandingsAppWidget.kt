@@ -175,7 +175,9 @@ fun List(list: List<Team>) {
                     Spacer(modifier = GlanceModifier.defaultWeight())
                     Text(
                         text = "${item.point}", style = TextStyle(
-                            fontWeight = FontWeight.Bold, color = ColorProvider(Color.Black)
+                            fontWeight = FontWeight.Bold,
+                            color =
+                            if (item.selected) ColorProvider(Colors.Red) else ColorProvider(Color.Black)
                         )
                     )
                 }
