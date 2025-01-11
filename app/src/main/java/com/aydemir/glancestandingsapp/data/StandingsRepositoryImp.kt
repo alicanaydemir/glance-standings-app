@@ -96,7 +96,7 @@ class StandingsRepositoryImp @Inject internal constructor(
         appContext.updateWidget()
 
         //api request will be here
-        delay(2000)
+        delay(1500)
 
         //get data to insert room
         val result = insertStandingsLocal(selectedTeamId)
@@ -116,7 +116,7 @@ class StandingsRepositoryImp @Inject internal constructor(
     suspend fun deleteSelectedTeam(): Flow<Resource<Unit>> = flow {
         showLoading()
         //api request will be here
-        delay(2000)
+        delay(1500)
 
         deleteStandingsLocal().collect {
             hideLoading()

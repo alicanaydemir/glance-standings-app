@@ -1,6 +1,8 @@
 package com.aydemir.glancestandingsapp.di
 
 import android.content.Context
+import androidx.room.Room
+import com.aydemir.glancestandingsapp.R
 import com.aydemir.glancestandingsapp.local.StandingsDao
 import com.aydemir.glancestandingsapp.local.StandingsDatabase
 import dagger.Module
@@ -22,8 +24,13 @@ annotation class AppCoroutineScope
 object DatabaseModule {
     @Provides
     @Singleton
-    fun provideAppDatabase(@ApplicationContext context: Context): StandingsDatabase =
-        StandingsDatabase.getInstance(context = context)
+    fun provideAppDatabase(@ApplicationContext context: Context): StandingsDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            StandingsDatabase::class.java,
+            context.getString(R.string.standings_database)
+        ).build()
+    }
 
     @Provides
     fun provideStandingsDao(database: StandingsDatabase): StandingsDao = database.standingsDao()
