@@ -84,7 +84,7 @@ class StandingsRepositoryImp @Inject internal constructor(
 
     //-----------------------------------------------------------------------//
 
-    suspend fun getStandings() = flow {
+    fun getStandings() = flow {
         val selectedTeamId = DataStoreSelectedTeamManager.getData(appContext).first()
         if (selectedTeamId == 0) {
             emit(Resource.Error(Exception()))
@@ -113,7 +113,7 @@ class StandingsRepositoryImp @Inject internal constructor(
         }
     }
 
-    suspend fun deleteSelectedTeam(): Flow<Resource<Unit>> = flow {
+    fun deleteSelectedTeam(): Flow<Resource<Unit>> = flow {
         showLoading()
         //api request will be here
         delay(1500)
@@ -124,7 +124,7 @@ class StandingsRepositoryImp @Inject internal constructor(
         }
     }
 
-    suspend fun setSelectedTeam(selectedTeamId: Int): Flow<Resource<Unit>> = flow {
+    fun setSelectedTeam(selectedTeamId: Int): Flow<Resource<Unit>> = flow {
         showLoading()
         //api request will be here
         delay(2000)
@@ -135,7 +135,7 @@ class StandingsRepositoryImp @Inject internal constructor(
     }
 
     //-------------------------------Room-------------------------------//
-    private suspend fun insertStandingsLocal(selectedTeamId: Int) = flow {
+    private fun insertStandingsLocal(selectedTeamId: Int) = flow {
         val data = DataSample.getListStandings()
         emit(Resource.Loading)
         try {
@@ -148,7 +148,7 @@ class StandingsRepositoryImp @Inject internal constructor(
         }
     }
 
-    private suspend fun deleteStandingsLocal(): Flow<Resource<Unit>> = flow {
+    private fun deleteStandingsLocal(): Flow<Resource<Unit>> = flow {
         DataStoreSelectedTeamManager.saveData(appContext, 0)
         standingsDao.deleteTeams()
         delay(200)

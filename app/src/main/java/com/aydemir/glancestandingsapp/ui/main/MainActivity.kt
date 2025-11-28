@@ -1,4 +1,4 @@
-package com.aydemir.glancestandingsapp.main
+package com.aydemir.glancestandingsapp.ui.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -44,7 +44,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import com.aydemir.glancestandingsapp.R
 import com.aydemir.glancestandingsapp.data.StandingsRepositoryImp
-import com.aydemir.glancestandingsapp.main.MainActivity
+import com.aydemir.glancestandingsapp.ui.main.MainActivity
 import com.aydemir.glancestandingsapp.model.StandingsUiState
 import com.aydemir.glancestandingsapp.model.StandingsState
 import com.aydemir.glancestandingsapp.model.Team
@@ -124,26 +124,18 @@ fun Header() {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = GlanceModifier.fillMaxWidth().padding(start = 12.dp, end = 12.dp).height(32.dp)
-            .background(Colors.Yellow)
+            .background(Colors.Yellow).clickable(actionStartActivity<MainActivity>()),
     ) {
         Text(
             text = LocalContext.current.getString(R.string.standings), style = TextStyle(
                 fontWeight = FontWeight.Bold, fontSize = 18.sp, color = ColorProvider(Color.Black)
-            ), modifier = GlanceModifier.clickable(
-                actionStartActivity<MainActivity>()
             )
         )
         Spacer(modifier = GlanceModifier.defaultWeight())
         Image(
             provider = ImageProvider(R.drawable.ic_refresh),
             contentDescription = null,
-            modifier = GlanceModifier.clickable(
-                onClick = actionRunCallback<RefreshAction>(
-                    actionParametersOf(
-                        RefreshAction.keySelectedTeamId to 6
-                    )
-                )
-            )
+            modifier = GlanceModifier.clickable(actionRunCallback<RefreshAction>())
         )
     }
 }
@@ -158,7 +150,8 @@ fun List(list: List<Team>) {
                 modifier = GlanceModifier.background(
                     if (item.position % 2 == 0) Color.White
                     else Color.LightGray
-                ).padding(start = 12.dp, end = 12.dp).height(24.dp).fillMaxWidth(),
+                ).padding(start = 12.dp, end = 12.dp).height(24.dp).fillMaxWidth()
+                    .clickable(actionStartActivity<MainActivity>()),
             ) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -176,8 +169,9 @@ fun List(list: List<Team>) {
                     Text(
                         text = "${item.point}", style = TextStyle(
                             fontWeight = FontWeight.Bold,
-                            color =
-                            if (item.selected) ColorProvider(Colors.Red) else ColorProvider(Color.Black)
+                            color = if (item.selected) ColorProvider(Colors.Red) else ColorProvider(
+                                Color.Black
+                            )
                         )
                     )
                 }
