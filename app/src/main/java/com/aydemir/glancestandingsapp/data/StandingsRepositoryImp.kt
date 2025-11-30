@@ -9,7 +9,6 @@ import com.aydemir.glancestandingsapp.model.Resource
 import com.aydemir.glancestandingsapp.model.StandingsState
 import com.aydemir.glancestandingsapp.model.StandingsUiState
 import com.aydemir.glancestandingsapp.model.Team
-import com.aydemir.glancestandingsapp.util.updateWidget
 import dagger.hilt.EntryPoint
 import dagger.hilt.EntryPoints
 import dagger.hilt.InstallIn
@@ -84,7 +83,7 @@ class StandingsRepositoryImp @Inject internal constructor(
 
     //-----------------------------------------------------------------------//
 
-    fun getStandings() = flow {
+    fun getStandingsFromApi() = flow {
         val selectedTeamId = DataStoreSelectedTeamManager.getData(appContext).first()
         if (selectedTeamId == 0) {
             emit(Resource.Error(Exception()))
@@ -93,13 +92,13 @@ class StandingsRepositoryImp @Inject internal constructor(
 
         showLoading()
         deleteStandingsNoResult()
-        appContext.updateWidget()
 
         //api request will be here
         delay(1500)
+        val data = DataSample.getListStandings()
 
         //get data to insert room
-        val result = insertStandingsLocal(selectedTeamId)
+        val result = insertStandingsLocal(data)
         when (result.last()) {
             is Resource.Success -> {
                 hideLoading()
@@ -114,33 +113,34 @@ class StandingsRepositoryImp @Inject internal constructor(
     }
 
     fun deleteSelectedTeam(): Flow<Resource<Unit>> = flow {
+        DataStoreSelectedTeamManager.saveData(appContext, 0)
         showLoading()
         //api request will be here
         delay(1500)
-
-        deleteStandingsLocal().collect {
-            hideLoading()
-            emit(Resource.Success(Unit))
-        }
-    }
-
-    fun setSelectedTeam(selectedTeamId: Int): Flow<Resource<Unit>> = flow {
-        showLoading()
-        //api request will be here
-        delay(2000)
-
-        DataStoreSelectedTeamManager.saveData(appContext, selectedTeamId)
+        deleteStandingsLocal().last()
         hideLoading()
         emit(Resource.Success(Unit))
     }
 
-    //-------------------------------Room-------------------------------//
-    private fun insertStandingsLocal(selectedTeamId: Int) = flow {
-        val data = DataSample.getListStandings()
+    fun setSelectedTeam(selectedTeamId: Int): Flow<Resource<Unit>> = flow {
+        DataStoreSelectedTeamManager.saveData(appContext, selectedTeamId)
+        val result = getStandingsFromApi()
+        when (result.last()) {
+            is Resource.Success -> {
+                emit(Resource.Success(Unit))
+            }
+
+            else -> {
+                emit(Resource.Error(Exception()))
+            }
+        }
+    }
+
+    //-----------------------------------Room-----------------------------------//
+    private fun insertStandingsLocal(list: List<Team>) = flow {
         emit(Resource.Loading)
         try {
-            DataStoreSelectedTeamManager.saveData(appContext, selectedTeamId)
-            standingsDao.insertTeams(data)
+            standingsDao.insertTeams(list)
             delay(200)
             emit(Resource.Success(Unit))
         } catch (e: Exception) {
@@ -149,7 +149,6 @@ class StandingsRepositoryImp @Inject internal constructor(
     }
 
     private fun deleteStandingsLocal(): Flow<Resource<Unit>> = flow {
-        DataStoreSelectedTeamManager.saveData(appContext, 0)
         standingsDao.deleteTeams()
         delay(200)
         emit(Resource.Success(Unit))

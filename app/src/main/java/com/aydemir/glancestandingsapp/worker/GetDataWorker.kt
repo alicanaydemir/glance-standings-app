@@ -11,7 +11,7 @@ class GetDataWorker(private val appContext: Context, workerParams: WorkerParamet
     CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
         val repository = StandingsRepositoryImp.get(appContext)
-        val result = repository.getStandings()
+        val result = repository.getStandingsFromApi()
         return when (result.last()) {
             is Resource.Success -> {
                 Result.Success.success()
